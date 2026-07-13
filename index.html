@@ -3,36 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Тур из Фото - Простой сервис</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>🏠 3D Тур из Фото</h1>
-
-        <div class="upload-section">
-            <h2>📸 Загрузите фото комнат</h2>
-            <div class="upload-area" id="dropZone">
-                <p>Перетащите фото сюда или кликните для выбора</p>
-                <input type="file" id="fileInput" accept="image/*" multiple>
-            </div>
-        </div>
-
-        <div class="viewer-section" id="viewerSection" style="display: none;">
-            <h2>🎮 3D Просмотр</h2>
-            <div class="viewer" id="viewer">
-                <div class="room" id="room">
-                    <!-- Фото будут загружаться сюда -->
-                </div>
-                <div class="controls">
-                    <button onclick="moveLeft()">⬅️ Влево</button>
-                    <button onclick="moveRight()">Вправо ➡️</button>
-                    <button onclick="resetView()">🔄 Сброс</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+    <title>3D Тур из Фот
+    <style>
+        body {
+            margin: 20px;
+            background: ea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 8
+            margin: 0 auto;
+            background:
+            padding: 30px;
+            border-radiu
+        }
+        .drop-zone {
+            border: 3px dashed #667eea;
+            border-radiu
+            padding: 50px;
+            text-align:
+            cursor: pointer;
+            transition:
+        }
+        .drop-zone:hover
+            background: #f0f8ff;
+        }
+        .drop-zone.dragover {
+            background:
+            border-color: #2196f3;
+        }
+        #fileInput {
+            display: non
+        }
+        .viewer {
+            margin-top: 20px;
+            text-align:
+            display: none;
+        }
+        .viewer img {
+            max-width: 1
+            height: auto;
+            border-radiu
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .controls {
+            margin-top:
+        }
+        .controls button
+            background: #667eea;
+            color: white
+            border: none;
+            padding: 10p
+            margin: 0 5px;
+            border
