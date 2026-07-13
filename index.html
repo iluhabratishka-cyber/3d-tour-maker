@@ -1,63 +1,245 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>3D Фото Тур</title>
+    <meta charset="UTF-8
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Фото Тур</
     <style>
-        body { padding: 20px; background: #f5f5f5; }
-        .container { background: white; padding: 30px; border-radius: 10px; max-width: 600px; margin: 0 auto; }
+        body { margin: 0#f5f5f5; font-family:Arial, sans-serif; }
+        .container { maxo; background: white;padding: 30px; border-radius: 10px; }
+        .upload-section
         #dropZone {
-            border: 3px solid #ddd;
+            border: 3px
             padding: 60px;
-            text-align: center;
+            text-align:
             margin: 20px 0;
-            cursor: pointer;
+            cursor: poin
             background: #fafafa;
+            transition:
+            border-radius: 10px;
         }
         #dropZone:hover { background: #f0f0f0; }
-        #viewer { display: none; margin-top: 20px; }
-        #viewer img { max-width: 100%; border-radius: 8px; }
-        .btn { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>📸 Загрузите фото</h1>
-        <div id="dropZone" onclick="document.getElementById('fileInput').click()">
-            <p>Кликните сюда для выбора фото</p>
-            <input type="file" id="fileInput" style="display: none;" accept="image/*">
-        </div>
+        #dropZone.dragovder-color: #2196f3; }
 
-        <div id="viewer">
-            <h3>Ваше фото:</h3>
-            <img id="photo" src="">
-            <button class="btn" onclick="resetView()">🔄 Еще фото</button>
-        </div>
-    </div>
+        #fileInput { dis
 
-    <script>
+        .viewer-section 30px; }
+        .viewer { position: relative; background: #f0f0f0; border-radius:
+10px; overflow: hidden;
+        .viewer img {
+            width: 100%;
+            height: 100%;
+            object-fit:
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: non
+        }
+        .viewer img.acti
+
+        .controls {
+            position: absolute;
+            bottom: 20px
+            left: 50%;
+            transform: t
+            display: flex;
+            gap: 10px;
+            background: rgba(255,255,255,0.9);
+            padding: 10p
+            border-radius: 25px;
+        }
+        .controls button {
+            background:
+            color: white;
+            border: none
+            padding: 12px 20px;
+            border-radiu
+            cursor: pointer;
+            font-size: 1
+        }
+        .controls button }
+
+        .info {
+            background: #e3f2fd;
+            padding: 15p
+            border-radius: 8px;
+            margin-botto
+            text-align: center;
+        }
+        .thumbnails {
+            display: fle
+            gap: 10px;
+            margin-top:
+            flex-wrap: wrap;
+            justify-cont
+        }
+        .thumbnail {
+            width: 100px;
+            height: 80px
+            <script>
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
-        const viewer = document.getElementById('viewer');
-        const photo = document.getElementById('photo');
+        const viewerSection = document.getElementById('viewerSection');
+        const photoContainer = document.getElementById('photoContainer');
+        const thumbnails = document.getElementById('thumbnails');
+        const progress = document.getElementById('progress');
 
-        fileInput.onchange = function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    photo.src = e.target.result;
-                    viewer.style.display = 'block';
-                    dropZone.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
-            }
-        };
+        let photos = [];
+        let currentPhotoIndex = 0;
+
+        // Обработка перетаскивания
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        // Обработка выбора файлов
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        // Обработка файлов
+        function handleFiles(files) {
+            if (files.length === 0) return;
+
+            progress.style.display = 'block';
+            progress.textContent = `Загружено 0 из ${files.length} фото`;
+
+            Array.from(files).forEach((file, index) => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        photos.push({
+                            src: e.target.result,
+                            name: file.name
+                        });
+
+                        progress.textContent = `Загружено ${photos.length} из ${files.length} фото`;
+
+                        // Если все фото загружены, показываем просмотр
+                        if (photos.length === files.length) {
+                            setTimeout(() => {
+                                showViewer();
+                            }, 500);
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Показываем просмотр
+        function showViewer() {
+            progress.style.display = 'none';
+            viewerSection.style.display = 'block';
+            photoContainer.innerHTML = '';
+            thumbnails.innerHTML = '';
+
+            // Создаем фото и миниатюры
+            photos.forEach((photo, index) => {
+                // Основное фото
+                const img = document.createElement('img');
+                img.src = photo.src;
+                img.alt = `Фото ${index + 1}`;
+                img.classList.add(index === 0 ? 'active' : '');
+                photoContainer.appendChild(img);
+
+                // Миниатюра
+                const thumb = document.createElement('img');
+                thumb.src = photo.src;
+                thumb.alt = `Фото ${index + 1}`;
+                thumb.classList.add('thumbnail', index === 0 ? 'active' : '');
+                thumb.onclick = () => showPhoto(index);
+                thumbnails.appendChild(thumb);
+            });
+
+            currentPhotoIndex = 0;
+        }
+
+        // Показываем конкретное фото
+        function showPhoto(index) {
+            // Скрываем все фото
+            photoContainer.querySelectorAll('img').forEach(img => {
+                img.classList.remove('active');
+            });
+
+            // Показываем выбранное
+            photoContainer.querySelectorAll('img')[index].classList.add('active');
+
+            // Обновляем миниатюры
+            thumbnails.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+
+            currentPhotoIndex = index;
+        }
+
+        // Навигация
+        function nextPhoto() {
+            const nextIndex = (currentPhotoIndex + 1) % photos.length;
+            showPhoto(nextIndex);
+        }
+
+        function previousPhoto() {
+            const prevIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+            showPhoto(prevIndex);
+        }
 
         function resetView() {
-            viewer.style.display = 'none';
+            currentPhotoIndex = 0;
+            showPhoto(0);
+        }
+
+        // Возврат к загрузке
+        function backToUpload() {
+            viewerSection.style.display = 'none';
             dropZone.style.display = 'block';
+            photos = [];
             fileInput.value = '';
         }
+
+        // Поделиться туром
+        function shareTour() {
+            const tourUrl = window.location.href + '?tour=' + encodeURIComponent(JSON.stringify(photos));
+            navigator.clipboard.writeText(tourUrl).then(() => {
+                alert('Ссылка на тур скопирована в буфер обмена!');
+            }).catch(() => {
+                prompt('Скопируйте эту ссылку:', tourUrl);
+            });
+        }
+
+        // Клавиатурная навигация
+        document.addEventListener('keydown', (e) => {
+            if (viewerSection.style.display === 'block') {
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        previousPhoto();
+                        break;
+                    case 'ArrowRight':
+                        nextPhoto();
+                        break;
+                    case 'Escape':
+                        backToUpload();
+                        break;
+                }
+            }
+        });
+
+        console.log('3D Фото Тур загружен! 🚀');
     </script>
 </body>
 </html>
