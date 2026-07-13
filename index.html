@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Тур из Фото - Простой сервис</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🏠 3D Тур из Фото</h1>
+
+        <div class="upload-section">
+            <h2>📸 Загрузите фото комнат</h2>
+            <div class="upload-area" id="dropZone">
+                <p>Перетащите фото сюда или кликните для выбора</p>
+                <input type="file" id="fileInput" accept="image/*" multiple>
+            </div>
+        </div>
+
+        <div class="viewer-section" id="viewerSection" style="display: none;">
+            <h2>🎮 3D Просмотр</h2>
+            <div class="viewer" id="viewer">
+                <div class="room" id="room">
+                    <!-- Фото будут загружаться сюда -->
+                </div>
+                <div class="controls">
+                    <button onclick="moveLeft()">⬅️ Влево</button>
+                    <button onclick="moveRight()">Вправо ➡️</button>
+                    <button onclick="resetView()">🔄 Сброс</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
