@@ -1,0 +1,86 @@
+Создайте новый файл simple-3d-tour.html:
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Простой 3D тур</title>
+    <style>
+        body { margin: 0; padding: 20px; background: #f0f0f0; font-family: Arial; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+        #viewer { position: relative; width: 100%; height: 400px; background: #ddd; margin: 20px 0; border-radius: 8px; }
+        .viewer img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .viewer img.active { display: block; }
+        .controls { text-align: center; margin: 20px 0; }
+        .controls button { background: #4CAF50; color: white; border: none; padding: 10px 20px; margin: 5px; border-radius: 5px; cursor: pointer; }
+        .upload { border: 2px dashed #ccc; padding: 30px; text-align: center; cursor: pointer; border-radius: 8px; margin: 20px 0; }
+        .upload:hover { background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏠 Простой 3D тур</h1>
+
+        <div class="upload" onclick="document.getElementById('files').click()">
+            <p>📸 Нажмите чтобы загрузить фото</p>
+            <input type="file" id="files" style="display: none;" accept="image/*" multiple>
+        </div>
+
+        <div class="controls">
+            <button onclick="previous()">⬅️ Назад</button>
+            <button onclick="reset()">🔄 В начало</button>
+            <button onclick="next()">Вперед ➡️</button>
+        </div>
+
+        <div id="viewer">
+            <!-- Фото будут здесь -->
+        </div>
+    </div>
+
+    <script>
+        const files = document.getElementById('files');
+        const viewer = document.getElementById('viewer');
+        let photos = [];
+        let current = 0;
+
+        files.onchange = function(e) {
+            viewer.innerHTML = '';
+            photos = [];
+
+            Array.from(e.target.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    viewer.appendChild(img);
+                    photos.push(img);
+
+                    if (photos.length === 1) {
+                        photos[0].classList.add('active');
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        };
+
+        function next() {
+            if (photos.length === 0) return;
+            photos[current].classList.remove('active');
+            current = (current + 1) % photos.length;
+            photos[current].classList.add('active');
+        }
+
+        function previous() {
+            if (photos.length === 0) return;
+            photos[current].classList.remove('active');
+            current = current === 0 ? photos.length - 1 : current - 1;
+            photos[current].classList.add('active');
+        }
+
+        function reset() {
+            if (photos.length === 0) return;
+            photos[current].classList.remove('active');
+            current = 0;
+            photos[current].classList.add('active');
+        }
+    </script>
+</body>
+</html>
